@@ -1,4 +1,4 @@
-import { animate } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+import { animate, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
 
 // Wait for DOM to load
 document.addEventListener("DOMContentLoaded", () => {
@@ -57,11 +57,21 @@ function setupNavigation() {
   });
 }
 
-// Initial subtle fade in for header and placeholder content
+// Initial subtle fade in for header and animated entry of Hero items
 function animateInitialLayout() {
   // Fade in header
   animate("header", { opacity: [0, 1], y: [-20, 0] }, { duration: 0.8, ease: "easeOut" });
   
-  // Fade in placeholder
-  animate(".hero-section-placeholder h1", { opacity: [0, 1], scale: [0.95, 1] }, { duration: 1, delay: 0.2 });
+  // Fade in hero elements sequentially
+  animate(".animate-item", 
+    { opacity: [0, 1], y: [40, 0] }, 
+    { 
+      delay: stagger(0.15, { start: 0.3 }), 
+      duration: 1, 
+      ease: [0.16, 1, 0.3, 1] 
+    }
+  );
+
+  // Fade in scroll indicator slowly
+  animate(".scroll-indicator", { opacity: [0, 0.7] }, { delay: 1.2, duration: 1 });
 }
