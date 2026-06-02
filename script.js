@@ -1,9 +1,10 @@
-import { animate, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+import { animate, stagger, inView } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
 
 // Wait for DOM to load
 document.addEventListener("DOMContentLoaded", () => {
   setupNavigation();
   animateInitialLayout();
+  setupScrollReveals();
 });
 
 // Mobile menu toggle logic
@@ -74,4 +75,27 @@ function animateInitialLayout() {
 
   // Fade in scroll indicator slowly
   animate(".scroll-indicator", { opacity: [0, 0.7] }, { delay: 1.2, duration: 1 });
+}
+
+// Scroll reveals using Motion's inView helper
+function setupScrollReveals() {
+  // Select all items with reveal-item class
+  const revealItems = document.querySelectorAll(".reveal-item");
+  
+  // Initial inline styles for seamless fade-in
+  revealItems.forEach(item => {
+    item.style.opacity = "0";
+    item.style.transform = "translateY(30px)";
+  });
+
+  // Dynamically trigger entrance animations
+  inView(".reveal-item", ({ target }) => {
+    animate(target, 
+      { opacity: 1, translateY: 0 }, 
+      { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    );
+    
+    // Stop observing once animated
+    return () => {};
+  });
 }
